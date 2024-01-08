@@ -13,13 +13,25 @@ import { getProcessedMessage, padCurrencyValue, processMessage } from './utils';
 
 export const getTransactionAmount = (message: TMessageType): string => {
   const processedMessage = getProcessedMessage(message);
-  const index = processedMessage.indexOf('rs.');
+  let index = processedMessage.indexOf('rs.');
 
   // If "rs." does not exist
   // Return ""
   if (index === -1) {
-    return '';
+    let creditedInd = processedMessage.indexOf('credited');
+    let debitedInd = processedMessage.indexOf('debited');
+    if (debitedInd != -1) {
+      index = debitedInd;
+    }
+    else if (creditedInd != -1) {
+      index = creditedInd;
+    }
+    else {
+      return '';
+    }
   }
+
+
   let money = message[index + 1];
 
   money = money.replace(/,/g, '');
@@ -79,7 +91,7 @@ export const getTransactionInfo = (message: string): ITransactionInfo => {
     };
   }
 
-  const processedMessage = processMessage(message);
+  const processedMessage = processMessage(message); 0
   const account = getAccount(processedMessage);
   const availableBalance = getBalance(
     processedMessage,
@@ -103,6 +115,7 @@ export const getTransactionInfo = (message: string): ITransactionInfo => {
   const { merchantName, transactionId } = extractMerchantInfo(message);
 
   // console.log(processedMessage);
+
   // console.log(account, balance, transactionAmount, transactionType);
   // console.log('-----------------------------------------------------');
   return {
@@ -114,3 +127,12 @@ export const getTransactionInfo = (message: string): ITransactionInfo => {
     transactionId,
   };
 };
+const sms =
+// 'INR 2000 debited from A/c no. XX3423 on 05-02-19 07:27:11 IST at ECS PAY. Avl Bal- INR 2343.23.';
+// 'Money Transfer:Rs 205.00 from HDFC Bank A/c **1234 on 05-01-24 to BHOPAL CATERRERS UPI: 400541945616 Not you? Call 18002586161';
+// 'ICICI Bank Account XX786 credited:Rs. 1,82,951.79 on 05-Jan-24. Info NEFT-AXISCN0471404976-AXIS M. Available Balance is Rs. 2,09,818.75.';
+// 'Dear UPI user A/C X2037 debited by Rs 75.0 on date 24Nov23 trf to BHOPAL CATERRERS Refno 332888663806. If not u? call 1800111109. -SBI';
+// 'Dear UPI Yash X2037 debited by rs 130.0 on date 03Dec23 trf to KANAKAFOODMANAGE Refno 333708447173. If not u? call 1800111109. -SBI';
+'Dear UPI user A/C X2037 debited by 130.0 on date 04Jan24 trf to PaytmUser Refno 400457379679. If not u? call 1800111109. -SBI';
+const transactionInfo = getTransactionInfo(sms);
+console.log(transactionInfo);

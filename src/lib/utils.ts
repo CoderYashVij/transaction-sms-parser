@@ -16,7 +16,7 @@ export const extractBondedAccountNo = (accountNo: string): string => {
   const strippedAccountNo = accountNo.replace('ac', '');
   return Number.isNaN(Number(strippedAccountNo)) ? '' : strippedAccountNo;
 };
-
+//This function returns array of words in a messagestring(input string) with few modifications in the word.
 export const processMessage = (message: string): string[] => {
   // convert to lower case
   let messageStr = message.toLowerCase();
@@ -46,7 +46,7 @@ export const processMessage = (message: string): string[] => {
   messageStr = messageStr.replace(/with /g, '');
   // remove 'no.'
   messageStr = messageStr.replace(/no. /g, '');
-  // replace all ac, acct, account with ac
+  // replace all ac,a/c,acct, account with ac
   messageStr = messageStr.replace(
     /\bac\b|\ba\/c\b|\bacct\b|\baccount\b/g,
     'ac'
@@ -75,7 +75,7 @@ export const processMessage = (message: string): string[] => {
   });
   return messageStr.split(' ').filter((str) => str !== '');
 };
-
+//It ensures message is processed using processmessage() function only if the input is a string. Else returns as it is. 
 export const getProcessedMessage = (message: TMessageType) => {
   let processedMessage: string[] = [];
   if (typeof message === 'string') {
@@ -83,10 +83,9 @@ export const getProcessedMessage = (message: TMessageType) => {
   } else {
     processedMessage = message;
   }
-
   return processedMessage;
 };
-
+//It ensures there are atleast 2 zeroes at the end of the currency value.
 export const padCurrencyValue = (val: string): string => {
   const [lhs, rhs] = val.split('.');
   return `${lhs}.${(rhs ?? '').padEnd(2, '0')}`;

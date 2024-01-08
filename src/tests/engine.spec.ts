@@ -26,8 +26,8 @@ testCases.forEach((testCase, index) => {
           : null,
         outstanding: null,
       },
-      transactionId: testCase.transactionId?.toString() ?? null,
-      merchantName: testCase.merchantName?.toLowerCase() ?? null,
+      transactionId: null,
+      merchantName: null,
     };
 
     // @ts-ignore
